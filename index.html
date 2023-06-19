@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Simple Web Socket</title>
+    </head>
+    <body>
+        <ul id="list"></ul>
+    </body>
+    <script src="./signalr.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://localhost:3000/send") // Replace with your SignalR endpoint URL
+            .build();
+
+        connection.on("SendMessage", function (message) {
+            var ul = document.getElementById("list");
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(message));
+            ul.appendChild(li);
+
+            // console.log("Received message: " + message);
+        });
+
+        connection
+            .start()
+            .then(function () {
+                console.log("Connected to SignalR server");
+            })
+            .catch(function (error) {
+                console.log("Error connecting to SignalR server: " + error);
+            });
+    </script>
+</html>
